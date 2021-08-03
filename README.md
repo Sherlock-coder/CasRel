@@ -7,7 +7,9 @@ Paper: https://arxiv.org/pdf/1909.03227.pdf
 
 Dataset: https://tianchi.aliyun.com/dataset/dataDetail?dataId=95414
 
-Result: ![](pic/result.jpg)
+Result: P: 59.274
+        R: 38.419
+        F1: 46.621
 
 Contect me: :email:1724321289@qq.com
 
