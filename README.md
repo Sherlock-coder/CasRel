@@ -11,5 +11,5 @@ Result: P: 59.274
         R: 38.419
         F1: 46.621
 
-Contect me: :email:1724321289@qq.com
+Contact me: :email:1724321289@qq.com
 
