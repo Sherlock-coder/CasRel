@@ -18,22 +18,22 @@ def get_loss(pred, gold, mask):
     return loss
 
 if __name__ == '__main__':
-    config = {'mode': 'train', 'batch_size': 200, 'epoch': 40, 'relation_types': 53, 'sub_weight': 1, 'obj_weight': 1}
+    config = {'mode': 'train', 'batch_size': 20, 'epoch': 40, 'relation_types': 53, 'sub_weight': 1, 'obj_weight': 1}
     path = 'data/CMeIE_train.json'
     data = MyDataset(path, config)
     dataloader = DataLoader(data, batch_size=config['batch_size'], shuffle=True, collate_fn=collate_fn)
     model = CasRel(config).to(device)
-    # model.load_state_dict(torch.load('params.pkl'))
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, betas=(0.9, 0.999))
+    model.load_state_dict(torch.load('params.pkl'))
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-5, betas=(0.9, 0.999))
     loss_recorder = 0
     for epoch_index in range(config['epoch']):
         time_start = time.perf_counter()
-        for batch_index, (sample, sub_start, sub_end, relation_start, relation_end, mask) in enumerate(iter(dataloader)):
+        for batch_index, (sample, sub_start, sub_end, relation_start, relation_end, mask, sub_start_single, sub_end_single) in enumerate(iter(dataloader)):
             batch_data = dict()
             batch_data['token_ids'] = sample
             batch_data['mask'] = mask
-            batch_data['sub_start'] = sub_start
-            batch_data['sub_end'] = sub_end
+            batch_data['sub_start'] = sub_start_single
+            batch_data['sub_end'] = sub_end_single
             pred_sub_start, pred_sub_end, pred_obj_start, pred_obj_end = model(batch_data)
             sub_start_loss = get_loss(pred_sub_start, sub_start, mask)
             sub_end_loss = get_loss(pred_sub_end, sub_end, mask)
@@ -44,10 +44,10 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            print("epoch: %d batch: %d loss: %f"% (epoch_index, batch_index, loss))
-            if(batch_index%10 == 9 or batch_index == 71):
+            # print("epoch: %d batch: %d loss: %f"% (epoch_index, batch_index, loss))
+            if(batch_index%100 == 99):
                 print(loss_recorder)
                 loss_recorder = 0
         time_end = time.perf_counter()
         torch.save(model.state_dict(), 'params.pkl')
-        print("success saved! time used = %fs."% (time_end-time_start))
+        print("successfully saved! time used = %fs."% (time_end-time_start))
