@@ -9,5 +9,7 @@ Dataset: https://tianchi.aliyun.com/dataset/dataDetail?dataId=95414
 
 Result: F1 = 54.6
 
+最近更新: 修复了无法检测出同义词的bug,必须使用最新的dataloader.py
+
 Contact me: :email:1724321289@qq.com
 
