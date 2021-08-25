@@ -61,7 +61,7 @@ class MyDataset(Dataset):
         for entry in gold:
             sub = entry['subject']
             obj = entry['object']['@value']
-            relation = entry['predicate']
+            relation = '同义词-' + entry['subject_type'] if entry['predicate'] == '同义词' else entry['predicate']
             #正则表达式无法处理小括号, 所以抛出异常
             try:
                 sub_pos = re.search(sub, text).span()
